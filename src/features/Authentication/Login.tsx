@@ -1,6 +1,18 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
+// @material-ui dependencies
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+
 // local dependencies
 import { firebaseAuth, signInWithGoogle } from 'src/config/firebase.config';
 import type { AuthError } from './types/AuthError';
@@ -43,54 +55,91 @@ const Login = () => {
   };
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={signInWithGoogle}
-        // iconType="logoGoogleG"
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
       >
-        Sign in with Google
-      </button>
-
-      <form name="login-form" onSubmit={handleSubmit}>
-        <label htmlFor="login-email-input">
-          Email
-          <input
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <Button
+          variant="outlined"
+          onClick={signInWithGoogle}
+          fullWidth
+          sx={{ mt: 3, mb: 2 }}
+          disabled={isDisabled}
+        >
+          Sign in with google
+        </Button>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
             disabled={isDisabled}
             id="login-email-input"
+            margin="normal"
+            required
+            fullWidth
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
           />
-        </label>
-
-        <label htmlFor="login-password-input">
-          Password
-          <input
+          <TextField
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
             disabled={isDisabled}
             id="login-password-input"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            autoComplete="current-password"
           />
-        </label>
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={isDisabled}
+          >
+            Sign In
+          </Button>
+          {error ? (
+            <Typography className="text-red-500 text-center">
+              {error?.message}
+            </Typography>
+          ) : null}
+          <Grid container>
+            <Grid item xs />
 
-        <button type="submit" disabled={isDisabled}>
-          Log in
-        </button>
-        {error ? <p className="text-red-500">{error?.message}</p> : null}
-      </form>
-      <div className="flex items-center justify-between mt-4">
-        <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4" />
-        <Link
-          to="/register"
-          className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
-        >
-          Don&apos;t have an account? Sign up here.
-        </Link>
-        <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4" />
-      </div>
-    </>
+            <Grid item>
+              <Link
+                to="/register"
+                className="text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline"
+              >
+                Don&apos;t have an account? Sign up here.
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
