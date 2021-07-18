@@ -1,1 +1,3 @@
-export const App = () => <div>App</div>;
+import { AppRouter } from 'src/router';
+
+export const App = () => <AppRouter />;
